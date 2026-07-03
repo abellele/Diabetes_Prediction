@@ -2,6 +2,7 @@ import streamlit as st
 import numpy as np
 import joblib
 from sklearn.preprocessing import StandardScaler
+import plotly.graph_objects as go
 
 # Page configuration
 st.set_page_config(
@@ -499,39 +500,230 @@ def input_page():
             except Exception as e:
                 st.error(f"Error during prediction: {str(e)}")
 
-def generate_health_insights(input_data):
-    insights = []
+def render_interactive_insights(input_data):
+    st.markdown("<div class='info-card'><h3 style='background: linear-gradient(90deg, #3B82F6, #8B5CF6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 1rem; font-weight: 800; display: inline-block;'>📌 Interactive Health Insights</h3>", unsafe_allow_html=True)
     
-    bmi = input_data.get('bmi', 0)
-    if bmi < 18.5:
-        insights.append("⚖️ **Weight Management:** Your BMI indicates you are underweight. Consider a balanced diet plan to reach a healthy weight.")
-    elif 25.0 <= bmi < 30.0:
-        insights.append("⚖️ **Weight Management:** Your BMI indicates you are overweight. A balanced diet and regular physical activity can help.")
-    elif bmi >= 30.0:
-        insights.append("⚖️ **Weight Management:** Your BMI falls into the obesity category. It is highly recommended to consult a healthcare provider for a plan.")
+    tab1, tab2, tab3 = st.tabs(["🔍 Deep Dive Insights", "📊 Visual Gauges", "🎛️ What-If Simulator"])
+    
+    with tab1:
+        st.markdown("<br>", unsafe_allow_html=True)
+        col_a, col_b = st.columns(2)
         
-    glucose = input_data.get('glucose', 0)
-    if glucose > 7.0:
-        insights.append("🩸 **Blood Sugar:** Your glucose levels are above the normal range. Reducing intake of refined sugars may help manage your levels.")
-    elif glucose < 4.0:
-        insights.append("🩸 **Blood Sugar:** Your glucose levels are below normal. Ensure you are eating regular, balanced meals.")
+        # BMI
+        bmi = input_data.get('bmi', 0)
+        if bmi < 18.5:
+            bmi_color = "#F59E0B"
+            bmi_bg = "#FFFBEB"
+            bmi_text = "Consider a balanced diet plan to reach a healthy weight. Consult a nutritionist."
+            bmi_stat = "Underweight"
+        elif 25.0 <= bmi < 30.0:
+            bmi_color = "#F59E0B"
+            bmi_bg = "#FFFBEB"
+            bmi_text = "A balanced diet and regular physical activity can help. Aim for 150 mins of exercise weekly."
+            bmi_stat = "Overweight"
+        elif bmi >= 30.0:
+            bmi_color = "#EF4444"
+            bmi_bg = "#FEF2F2"
+            bmi_text = "It is highly recommended to consult a healthcare provider for a weight management plan."
+            bmi_stat = "Obesity"
+        else:
+            bmi_color = "#10B981"
+            bmi_bg = "#ECFDF5"
+            bmi_text = "Keep up the good work! Maintain a balanced diet and regular exercise."
+            bmi_stat = "Healthy Range"
+            
+        with col_a:
+            st.markdown(f"""
+            <div style="background-color: {bmi_bg}; padding: 1.5rem; border-radius: 15px; border-left: 5px solid {bmi_color}; height: 100%; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 1rem;">
+                <h4 style="color: {bmi_color}; margin-top: 0; font-size: 18px;">⚖️ Weight Management (BMI)</h4>
+                <p style="font-size: 24px; font-weight: 800; color: #1E293B; margin: 10px 0;">{bmi} <span style="font-size: 16px; font-weight: 600; color: {bmi_color};">({bmi_stat})</span></p>
+                <p style="color: #475569; font-size: 14px; margin-bottom: 0;"><strong>Action Plan:</strong> {bmi_text}</p>
+            </div>
+            """, unsafe_allow_html=True)
+            
+        # Blood Sugar
+        glucose = input_data.get('glucose', 0)
+        if glucose > 7.0:
+            gl_color = "#F59E0B"
+            gl_bg = "#FFFBEB"
+            gl_text = "Reducing intake of refined sugars and carbs may help manage your levels. Monitor regularly."
+            gl_stat = "Above Normal"
+        elif glucose < 4.0:
+            gl_color = "#F59E0B"
+            gl_bg = "#FFFBEB"
+            gl_text = "Ensure you are eating regular, balanced meals. Don't skip meals."
+            gl_stat = "Below Normal"
+        else:
+            gl_color = "#10B981"
+            gl_bg = "#ECFDF5"
+            gl_text = "Excellent! Keep maintaining your current diet and healthy habits."
+            gl_stat = "Normal"
+            
+        with col_b:
+            st.markdown(f"""
+            <div style="background-color: {gl_bg}; padding: 1.5rem; border-radius: 15px; border-left: 5px solid {gl_color}; height: 100%; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 1rem;">
+                <h4 style="color: {gl_color}; margin-top: 0; font-size: 18px;">🩸 Blood Sugar (Glucose)</h4>
+                <p style="font-size: 24px; font-weight: 800; color: #1E293B; margin: 10px 0;">{glucose} <span style="font-size: 16px; font-weight: 600; color: {gl_color};">({gl_stat})</span></p>
+                <p style="color: #475569; font-size: 14px; margin-bottom: 0;"><strong>Action Plan:</strong> {gl_text}</p>
+            </div>
+            """, unsafe_allow_html=True)
+            
+        col_c, col_d = st.columns(2)
         
-    systolic = input_data.get('systolic_bp', 0)
-    diastolic = input_data.get('diastolic_bp', 0)
-    hypertensive = input_data.get('hypertensive', 0)
-    if systolic >= 130 or diastolic >= 80 or hypertensive == 1:
-        insights.append("🫀 **Blood Pressure:** Your blood pressure indicators are elevated. Reducing sodium intake, regular exercise, and stress management can help.")
+        # Blood Pressure
+        systolic = input_data.get('systolic_bp', 0)
+        diastolic = input_data.get('diastolic_bp', 0)
+        hypertensive = input_data.get('hypertensive', 0)
+        if systolic >= 130 or diastolic >= 80 or hypertensive == 1:
+            bp_color = "#EF4444"
+            bp_bg = "#FEF2F2"
+            bp_text = "Reducing sodium intake, regular exercise, and stress management can help lower your BP."
+            bp_stat = "Elevated"
+        else:
+            bp_color = "#10B981"
+            bp_bg = "#ECFDF5"
+            bp_text = "Great job! Continue to monitor and maintain a healthy lifestyle."
+            bp_stat = "Normal"
+            
+        with col_c:
+            st.markdown(f"""
+            <div style="background-color: {bp_bg}; padding: 1.5rem; border-radius: 15px; border-left: 5px solid {bp_color}; height: 100%; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 1rem;">
+                <h4 style="color: {bp_color}; margin-top: 0; font-size: 18px;">🫀 Blood Pressure</h4>
+                <p style="font-size: 24px; font-weight: 800; color: #1E293B; margin: 10px 0;">{systolic}/{diastolic} <span style="font-size: 16px; font-weight: 600; color: {bp_color};">({bp_stat})</span></p>
+                <p style="color: #475569; font-size: 14px; margin-bottom: 0;"><strong>Action Plan:</strong> {bp_text}</p>
+            </div>
+            """, unsafe_allow_html=True)
+            
+        # Heart Rate
+        pulse = input_data.get('pulse_rate', 0)
+        if pulse > 100:
+            hr_color = "#F59E0B"
+            hr_bg = "#FFFBEB"
+            hr_text = "Cardiovascular exercise and stress management might be beneficial."
+            hr_stat = "High"
+        elif pulse < 60 and pulse > 0:
+            hr_color = "#8B5CF6"
+            hr_bg = "#F5F3FF"
+            hr_text = "This can be normal for athletes, but monitor for dizziness or fatigue."
+            hr_stat = "Low"
+        else:
+            hr_color = "#10B981"
+            hr_bg = "#ECFDF5"
+            hr_text = "Your resting heart rate is in a healthy range."
+            hr_stat = "Normal"
+            
+        with col_d:
+            st.markdown(f"""
+            <div style="background-color: {hr_bg}; padding: 1.5rem; border-radius: 15px; border-left: 5px solid {hr_color}; height: 100%; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 1rem;">
+                <h4 style="color: {hr_color}; margin-top: 0; font-size: 18px;">❤️ Heart Rate (Pulse)</h4>
+                <p style="font-size: 24px; font-weight: 800; color: #1E293B; margin: 10px 0;">{pulse} <span style="font-size: 16px; font-weight: 600; color: {hr_color};">({hr_stat})</span></p>
+                <p style="color: #475569; font-size: 14px; margin-bottom: 0;"><strong>Action Plan:</strong> {hr_text}</p>
+            </div>
+            """, unsafe_allow_html=True)
+            
+    with tab2:
+        st.markdown("<br>", unsafe_allow_html=True)
+        def create_gauge(value, title, min_val, max_val, steps):
+            fig = go.Figure(go.Indicator(
+                mode = "gauge",
+                value = value,
+                domain = {'x': [0, 1], 'y': [0, 1]},
+                title = {'text': title, 'font': {'size': 16, 'color': '#2B3674'}},
+                gauge = {
+                    'axis': {'range': [min_val, max_val]},
+                    'bar': {'color': "#2B3674", 'thickness': 0.2},
+                    'steps': steps
+                }
+            ))
+            
+            # Format value for display
+            if isinstance(value, (float, int)):
+                val_text = f"{value:.1f}" if value % 1 != 0 else f"{int(value)}"
+            else:
+                val_text = str(value)
+                
+            fig.add_annotation(
+                x=0.5, y=0.15,
+                xref="paper", yref="paper",
+                text=val_text,
+                font=dict(size=32, color='#2B3674'),
+                showarrow=False
+            )
+            
+            fig.update_layout(height=250, margin=dict(l=20, r=20, t=50, b=20), paper_bgcolor='rgba(0,0,0,0)')
+            return fig
+
+        col_g1, col_g2 = st.columns(2)
+        with col_g1:
+            bmi_steps = [
+                {'range': [10, 18.5], 'color': '#FEEBC8'},
+                {'range': [18.5, 25], 'color': '#C6F6D5'},
+                {'range': [25, 30], 'color': '#FEEBC8'},
+                {'range': [30, 45], 'color': '#FED7D7'}
+            ]
+            st.plotly_chart(create_gauge(input_data.get('bmi', 0), "BMI", 10, 45, bmi_steps), use_container_width=True)
+            
+            bp_steps = [
+                {'range': [60, 120], 'color': '#C6F6D5'},
+                {'range': [120, 130], 'color': '#FEEBC8'},
+                {'range': [130, 200], 'color': '#FED7D7'}
+            ]
+            st.plotly_chart(create_gauge(input_data.get('systolic_bp', 0), "Systolic BP (mmHg)", 60, 200, bp_steps), use_container_width=True)
+            
+        with col_g2:
+            glucose_steps = [
+                {'range': [0, 4.0], 'color': '#FEEBC8'},
+                {'range': [4.0, 7.0], 'color': '#C6F6D5'},
+                {'range': [7.0, 15.0], 'color': '#FED7D7'}
+            ]
+            st.plotly_chart(create_gauge(input_data.get('glucose', 0), "Glucose (mmol/L)", 0, 15, glucose_steps), use_container_width=True)
+            
+            pulse_steps = [
+                {'range': [40, 60], 'color': '#FEEBC8'},
+                {'range': [60, 100], 'color': '#C6F6D5'},
+                {'range': [100, 160], 'color': '#FED7D7'}
+            ]
+            st.plotly_chart(create_gauge(input_data.get('pulse_rate', 0), "Pulse Rate (bpm)", 40, 160, pulse_steps), use_container_width=True)
+
+    with tab3:
+        st.markdown("<p style='color: #718096; margin-bottom: 1rem; margin-top: 1rem;'>Adjust the sliders below to see how changes in your health metrics impact your diabetes risk in real-time.</p>", unsafe_allow_html=True)
         
-    pulse = input_data.get('pulse_rate', 0)
-    if pulse > 100:
-        insights.append("❤️ **Heart Rate:** Your resting pulse rate is high. Cardiovascular exercise and stress management might be beneficial.")
-    elif pulse < 60 and pulse > 0:
-        insights.append("❤️ **Heart Rate:** Your resting pulse rate is lower than average. This can be normal for athletes, but monitor for dizziness.")
+        sim_col1, sim_col2 = st.columns(2)
+        with sim_col1:
+            sim_bmi = st.slider("BMI", 10.0, 50.0, float(input_data.get('bmi', 22.0)), 0.5)
+            sim_glucose = st.slider("Glucose Level (mmol/L)", 2.0, 15.0, float(input_data.get('glucose', 5.0)), 0.1)
+            sim_sys_bp = st.slider("Systolic BP", 80.0, 200.0, float(input_data.get('systolic_bp', 120.0)), 1.0)
+        with sim_col2:
+            sim_weight = st.slider("Weight (kg)", 30.0, 150.0, float(input_data.get('weight', 60.0)), 1.0)
+            sim_dia_bp = st.slider("Diastolic BP", 50.0, 120.0, float(input_data.get('diastolic_bp', 80.0)), 1.0)
+            sim_pulse = st.slider("Pulse Rate (bpm)", 40.0, 150.0, float(input_data.get('pulse_rate', 70.0)), 1.0)
+            
+        hypertensive = input_data.get('hypertensive', 0)
         
-    if not insights:
-        insights.append("✨ **General Health:** Your metrics generally look to be within typical ranges. Keep up the good work!")
-        
-    return insights
+        if model is not None:
+            sim_input_array = np.array([[
+                sim_glucose, hypertensive, sim_pulse, sim_weight, sim_sys_bp, sim_bmi, sim_dia_bp
+            ]])
+            training_mean = np.array([7.26, 0.134, 74.5, 55.2, 138.8, 23.8, 81.3])
+            training_std = np.array([4.8, 0.34, 12.5, 11.8, 21.5, 5.2, 10.8])
+            sim_input_scaled = (sim_input_array - training_mean) / training_std
+            
+            sim_prob = model.predict_proba(sim_input_scaled)[0][1] * 100
+            
+            st.markdown(f"""
+            <div style="background: {'#FFF1F0' if sim_prob >= 35 else '#F0FFF4'}; padding: 1.5rem; border-radius: 15px; text-align: center; margin-top: 1rem; border: 1px solid {'#FED7D7' if sim_prob >= 35 else '#C6F6D5'};">
+                <h4 style="color: {'#E53E3E' if sim_prob >= 35 else '#38A169'}; margin-bottom: 0.5rem;">Simulated Risk Probability</h4>
+                <h2 style="color: {'#E53E3E' if sim_prob >= 35 else '#38A169'}; font-size: 32px; font-weight: 800; margin: 0;">{sim_prob:.1f}%</h2>
+                <p style="color: #718096; margin-top: 0.5rem;">
+                    {'Your simulated risk is above the threshold (35%). Try lowering BMI, Glucose, or Blood Pressure.' if sim_prob >= 35 else 'Your simulated risk is in the safe zone!'}
+                </p>
+            </div>
+            """, unsafe_allow_html=True)
+        else:
+            st.error("Model not loaded for simulation.")
+
+    st.markdown("</div>", unsafe_allow_html=True)
+
 
 # Result Page - Negative
 def result_negative_page():
@@ -539,13 +731,13 @@ def result_negative_page():
     
     st.markdown("""
     <div style="text-align: left; margin: 1rem 0;">
-        <h2 style="color: #2B3674; font-size: 28px;">Prediction Report</h2>
+        <h2 style="background: linear-gradient(90deg, #2E66F6, #8B5CF6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 32px; font-weight: 800; display: inline-block;">Prediction Report</h2>
     </div>
     """, unsafe_allow_html=True)
     
     st.markdown("""
     <div class="result-negative">
-        <h1 class="result-title" style="color: #05CD99;">No Diabetes Detected</h1>
+        <h1 class="result-title" style="background: linear-gradient(90deg, #05CD99, #10B981); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">No Diabetes Detected</h1>
         <p class="result-subtitle">Your health indicators currently show a low likelihood of diabetes.</p>
     </div>
     """, unsafe_allow_html=True)
@@ -589,7 +781,7 @@ def result_negative_page():
     with col2:
         st.markdown("""
         <div class="chart-container" style="height: 100%;">
-            <h3 class="chart-title">Health Status Analysis</h3>
+            <h3 class="chart-title" style="background: linear-gradient(90deg, #F59E0B, #EC4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">Health Status Analysis</h3>
             <p class="chart-text">
                 Based on your health data, the system detected a low possibility of diabetes. 
                 The chart on the left illustrates your current prediction confidence generated by our AI model. 
@@ -603,10 +795,7 @@ def result_negative_page():
     
     input_data = st.session_state.get('input_data', {})
     if input_data:
-        st.markdown("<div class='info-card'><h3 style='color: #2B3674; margin-bottom: 1rem;'>📌 Personalized Health Insights</h3>", unsafe_allow_html=True)
-        for insight in generate_health_insights(input_data):
-            st.info(insight)
-        st.markdown("</div>", unsafe_allow_html=True)
+        render_interactive_insights(input_data)
     
     # New prediction button
     st.markdown("<br>", unsafe_allow_html=True)
@@ -622,13 +811,13 @@ def result_positive_page():
     
     st.markdown("""
     <div style="text-align: left; margin: 1rem 0;">
-        <h2 style="color: #2B3674; font-size: 28px;">Prediction Report</h2>
+        <h2 style="background: linear-gradient(90deg, #2E66F6, #8B5CF6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 32px; font-weight: 800; display: inline-block;">Prediction Report</h2>
     </div>
     """, unsafe_allow_html=True)
     
     st.markdown("""
     <div class="result-positive" style="border: 1px solid #FED7D7;">
-        <h1 class="result-title" style="color: #E53E3E;">Diabetes Detected</h1>
+        <h1 class="result-title" style="background: linear-gradient(90deg, #E53E3E, #F43F5E); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">Diabetes Detected</h1>
         <p class="result-subtitle">The model identified indicators associated with diabetes.</p>
     </div>
     """, unsafe_allow_html=True)
@@ -672,7 +861,7 @@ def result_positive_page():
     with col2:
         st.markdown("""
         <div class="chart-container" style="height: 100%;">
-            <h3 class="chart-title">Health Status Analysis</h3>
+            <h3 class="chart-title" style="background: linear-gradient(90deg, #F59E0B, #EC4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">Health Status Analysis</h3>
             <p class="chart-text">
                 Based on your health data, you have a <b>{:.0f}% possibility</b> of diabetes. 
                 The chart on the left illustrates your current prediction confidence generated by our AI model.<br><br>
@@ -686,10 +875,7 @@ def result_positive_page():
     
     input_data = st.session_state.get('input_data', {})
     if input_data:
-        st.markdown("<div class='info-card'><h3 style='color: #2B3674; margin-bottom: 1rem;'>📌 Personalized Health Insights</h3>", unsafe_allow_html=True)
-        for insight in generate_health_insights(input_data):
-            st.info(insight)
-        st.markdown("</div>", unsafe_allow_html=True)
+        render_interactive_insights(input_data)
     
     # New prediction button
     st.markdown("<br>", unsafe_allow_html=True)
