@@ -1,0 +1,74 @@
+{
+  "model_name": "Ensemble Stacking (Random Forest, Logistic Regression, KNN, XGBoost)",
+  "source_notebook": "(1)_model_balancing_seperti_code_awal_awal.ipynb",
+  "selected_features": [
+    "glucose",
+    "hypertensive",
+    "systolic_bp",
+    "diastolic_bp",
+    "bmi",
+    "weight",
+    "pulse_rate"
+  ],
+  "optimal_threshold": 0.75,
+  "scaler_mean": [
+    7.262876249662253,
+    0.11051067279113753,
+    134.1615779519049,
+    82.28519319102945,
+    22.245412050797082,
+    53.5635098621994,
+    76.6386111861659
+  ],
+  "scaler_scale": [
+    1.8128570110113391,
+    0.313525220660775,
+    21.538736061900675,
+    12.25868642045981,
+    3.719712709009058,
+    9.75858329998094,
+    11.89247958359298
+  ],
+  "evaluation_summary": {
+    "Random Forest": {
+      "best_threshold": 0.4,
+      "val_f1": 0.4404,
+      "test_accuracy": 0.8601,
+      "test_precision": 0.2484,
+      "test_recall": 0.5652,
+      "test_f1": 0.3451
+    },
+    "Logistic Regression": {
+      "best_threshold": 0.67,
+      "val_f1": 0.4466,
+      "test_accuracy": 0.8554,
+      "test_precision": 0.2273,
+      "test_recall": 0.5072,
+      "test_f1": 0.3139
+    },
+    "KNN": {
+      "best_threshold": 0.45,
+      "val_f1": 0.4421,
+      "test_accuracy": 0.8752,
+      "test_precision": 0.2632,
+      "test_recall": 0.5072,
+      "test_f1": 0.3465
+    },
+    "XGBoost": {
+      "best_threshold": 0.46,
+      "val_f1": 0.4583,
+      "test_accuracy": 0.8762,
+      "test_precision": 0.2687,
+      "test_recall": 0.5217,
+      "test_f1": 0.3547
+    },
+    "Ensemble Stacking": {
+      "best_threshold": 0.75,
+      "val_f1": 0.4731,
+      "test_accuracy": 0.8856,
+      "test_precision": 0.2937,
+      "test_recall": 0.5362,
+      "test_f1": 0.3795
+    }
+  }
+}
