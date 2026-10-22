@@ -5,7 +5,8 @@ Based on the newest notebook: (1)_model_balancing_seperti_code_awal_awal.ipynb
 Features:
 - Outlier handling (IQR clipping)
 - 70/10/20 Stratified train/validation/test split
-- Feature selection via Weighted Voting (Correlation, Random Forest, L1, RFE) -> Top 7 features
+- Full feature set (all 14 input features, no feature selection), matching the
+  notebook's "Full Feature" Ensemble Stacking experiment
 - StandardScaler normalization
 - Class balancing via RandomOverSampler (0.2) + BorderlineSMOTE (0.3)
 - Stacking Ensemble (Random Forest, Logistic Regression, KNN, XGBoost)
@@ -93,9 +94,9 @@ def train_and_save():
         random_state=42
     )
 
-    # Selected top 7 features from the notebook's weighted ranking
-    best_features = ['glucose', 'hypertensive', 'systolic_bp', 'diastolic_bp', 'bmi', 'weight', 'pulse_rate']
-    print(f"[3/6] Selected features: {best_features}")
+    # Use all 14 input features (no feature selection), in dataset column order
+    best_features = list(X_train_full.columns)
+    print(f"[3/6] Using all {len(best_features)} features: {best_features}")
 
     # Standard scaling
     scaler_full = StandardScaler()
@@ -119,20 +120,12 @@ def train_and_save():
     X_val_selected = X_val_scaled[best_features]
     X_test_selected = X_test_scaled[best_features]
 
-    # Save dedicated scaler for the selected features
-    feature_indices = [X_train_full.columns.get_loc(c) for c in best_features]
-    selected_mean = scaler_full.mean_[feature_indices].tolist()
-    selected_scale = scaler_full.scale_[feature_indices].tolist()
-
-    selected_scaler = StandardScaler()
-    selected_scaler.mean_ = np.array(selected_mean)
-    selected_scaler.scale_ = np.array(selected_scale)
-    selected_scaler.var_ = np.square(selected_scale)
-    selected_scaler.n_features_in_ = len(best_features)
-    selected_scaler.feature_names_in_ = np.array(best_features, dtype=object)
+    # Save the scaler fitted on the full 14-feature training set
+    selected_mean = scaler_full.mean_.tolist()
+    selected_scale = scaler_full.scale_.tolist()
 
     scaler_path = os.path.join(base_dir, "scaler.pkl")
-    joblib.dump(selected_scaler, scaler_path)
+    joblib.dump(scaler_full, scaler_path)
     print(f"      Saved scaler to: {scaler_path}")
 
     # Build Ensemble Stacking model

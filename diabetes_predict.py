@@ -7,12 +7,22 @@ import json
 from translations import t
 
 # Define feature order corresponding to the trained model
-FEATURE_NAMES = ['glucose', 'hypertensive', 'systolic_bp', 'diastolic_bp', 'bmi', 'weight', 'pulse_rate']
-OPTIMAL_THRESHOLD = 0.73  # Validation-tuned threshold for Ensemble Stacking (New Revision)
+FEATURE_NAMES = [
+    'age', 'gender', 'pulse_rate', 'systolic_bp', 'diastolic_bp', 'glucose', 'height',
+    'weight', 'bmi', 'family_diabetes', 'hypertensive', 'family_hypertension',
+    'cardiovascular_disease', 'stroke'
+]
+OPTIMAL_THRESHOLD = 0.72  # Validation-tuned threshold for Ensemble Stacking (14 features)
 
-# Default fallback scaler parameters (from training set)
-FALLBACK_MEAN = np.array([7.2629, 0.1105, 134.1616, 82.2852, 22.2454, 53.5635, 76.6386])
-FALLBACK_SCALE = np.array([1.8129, 0.3135, 21.5387, 12.2587, 3.7197, 9.7586, 11.8925])
+# Default fallback scaler parameters (from training set, same order as FEATURE_NAMES)
+FALLBACK_MEAN = np.array([
+    45.8563, 0.7098, 76.6386, 134.1616, 82.2852, 7.2629, 1.5502,
+    53.5635, 22.2454, 0.0327, 0.1105, 0.0351, 0.0105, 0.0041
+])
+FALLBACK_SCALE = np.array([
+    13.3576, 0.4539, 11.8925, 21.5387, 12.2587, 1.8129, 0.0698,
+    9.7586, 3.7197, 0.1778, 0.3135, 0.1841, 0.1021, 0.0635
+])
 
 # Language selection
 if 'lang' not in st.session_state:
@@ -69,40 +79,63 @@ with col_title:
     st.title(t('app_title', lang))
     st.write(t('form_subtitle', lang))
 
-# Input user dengan nilai default yang wajar
+# Input user dengan nilai default yang wajar (14 fitur)
+yes_no = lambda x: t('opt_no', lang) if x == 0 else t('opt_yes', lang)
+
+age = st.number_input(t('label_age', lang), min_value=0, max_value=120, value=35, step=1,
+                      help=t('help_age', lang))
+gender = st.selectbox(t('label_gender', lang), [0, 1],
+                      format_func=lambda x: t('opt_male', lang) if x == 0 else t('opt_female', lang))
+height_cm = st.number_input(t('label_height', lang), min_value=0.0, value=160.0, step=1.0,
+                            help=t('help_height', lang))
+weight = st.number_input(t('label_weight', lang), min_value=0.0, value=60.0, step=0.1)
+bmi = st.number_input(t('label_bmi', lang), min_value=0.0, value=22.0, step=0.1,
+                     help=t('help_bmi', lang))
 glucose = st.number_input(t('label_glucose', lang), min_value=0.0, value=5.0, step=0.1, 
                           help=t('help_glucose', lang))
-hypertensive = st.selectbox(t('label_hypertensive', lang), [0, 1], 
-                            format_func=lambda x: t('opt_no', lang) if x == 0 else t('opt_yes', lang))
+pulse_rate = st.number_input(t('label_pulse', lang), min_value=0.0, value=70.0, step=1.0,
+                             help=t('help_pulse', lang))
 systolic_bp = st.number_input(t('label_systolic', lang), min_value=0.0, value=120.0, step=1.0,
                               help=t('help_systolic', lang))
 diastolic_bp = st.number_input(t('label_diastolic', lang), min_value=0.0, value=80.0, step=1.0,
                                help=t('help_diastolic', lang))
-bmi = st.number_input(t('label_bmi', lang), min_value=0.0, value=22.0, step=0.1,
-                     help=t('help_bmi', lang))
-weight = st.number_input(t('label_weight', lang), min_value=0.0, value=60.0, step=0.1)
-pulse_rate = st.number_input(t('label_pulse', lang), min_value=0.0, value=70.0, step=1.0,
-                             help=t('help_pulse', lang))
+hypertensive = st.selectbox(t('label_hypertensive', lang), [0, 1], format_func=yes_no)
+family_hypertension = st.selectbox(t('label_family_hypertension', lang), [0, 1], format_func=yes_no,
+                                   help=t('help_family_hypertension', lang))
+family_diabetes = st.selectbox(t('label_family_diabetes', lang), [0, 1], format_func=yes_no,
+                               help=t('help_family_diabetes', lang))
+cardiovascular_disease = st.selectbox(t('label_cardiovascular', lang), [0, 1], format_func=yes_no,
+                                      help=t('help_cardiovascular', lang))
+stroke = st.selectbox(t('label_stroke', lang), [0, 1], format_func=yes_no,
+                      help=t('help_stroke', lang))
 
 # Tombol prediksi
 if st.button(t('btn_predict', lang)):
     
     # Validasi input - pastikan tidak ada nilai 0 yang tidak wajar
-    if glucose == 0 or pulse_rate == 0 or weight == 0 or systolic_bp == 0 or bmi == 0 or diastolic_bp == 0:
+    if (age == 0 or height_cm == 0 or glucose == 0 or pulse_rate == 0 or weight == 0
+            or systolic_bp == 0 or bmi == 0 or diastolic_bp == 0):
         st.warning(t('err_zero', lang))
     elif model is None:
         st.error(t('err_model', lang))
     else:
-        # Susun DataFrame sesuai urutan training model baru:
-        # ['glucose', 'hypertensive', 'systolic_bp', 'diastolic_bp', 'bmi', 'weight', 'pulse_rate']
+        # Susun DataFrame sesuai urutan training model (14 fitur, lihat FEATURE_NAMES).
+        # Tinggi badan dikonversi dari cm ke meter sesuai satuan data training.
         raw_df = pd.DataFrame([{
-            'glucose': glucose,
-            'hypertensive': hypertensive,
+            'age': age,
+            'gender': gender,
+            'pulse_rate': pulse_rate,
             'systolic_bp': systolic_bp,
             'diastolic_bp': diastolic_bp,
-            'bmi': bmi,
+            'glucose': glucose,
+            'height': height_cm / 100.0,
             'weight': weight,
-            'pulse_rate': pulse_rate
+            'bmi': bmi,
+            'family_diabetes': family_diabetes,
+            'hypertensive': hypertensive,
+            'family_hypertension': family_hypertension,
+            'cardiovascular_disease': cardiovascular_disease,
+            'stroke': stroke
         }])[FEATURE_NAMES]
         
         # Scaling

@@ -84,23 +84,39 @@ Jika tidak otomatis terbuka, copy paste URL tersebut ke browser Anda.
 
 ## 📊 Contoh Data untuk Testing
 
+Form prediksi memiliki 14 input.
+
 **Data Normal (Non-Diabetes):**
-- Glucose: 5.5 mmol/L
-- Hypertensive: No (0)
-- Systolic BP: 120 mmHg
+- Age: 30 tahun
+- Gender: Female
+- Height: 160 cm
 - Weight: 65 kg
 - BMI: 22.5
-- Diastolic BP: 80 mmHg
+- Glucose: 5.5 mmol/L
 - Pulse Rate: 75 bpm
+- Systolic BP: 120 mmHg
+- Diastolic BP: 80 mmHg
+- Hypertensive: No (0)
+- Family Hypertension: No (0)
+- Family Diabetes: No (0)
+- Cardiovascular Disease: No (0)
+- Stroke: No (0)
 
 **Data High Risk (Diabetes):**
-- Glucose: 15.0 mmol/L
-- Hypertensive: Yes (1)
-- Systolic BP: 160 mmHg
+- Age: 60 tahun
+- Gender: Male
+- Height: 165 cm
 - Weight: 85 kg
 - BMI: 32.0
-- Diastolic BP: 100 mmHg
+- Glucose: 15.0 mmol/L
 - Pulse Rate: 95 bpm
+- Systolic BP: 160 mmHg
+- Diastolic BP: 100 mmHg
+- Hypertensive: Yes (1)
+- Family Hypertension: Yes (1)
+- Family Diabetes: Yes (1)
+- Cardiovascular Disease: No (0)
+- Stroke: No (0)
 
 ## 🛑 Troubleshooting
 

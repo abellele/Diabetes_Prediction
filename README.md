@@ -81,10 +81,10 @@ SugarSense is intended for **educational purposes only** and should not replace 
 
 The prediction model uses the newest revised Ensemble Stacking approach from `(1)_model_balancing_seperti_code_awal_awal.ipynb`:
 - **Model**: Ensemble Stacking (`RandomForest`, `LogisticRegression`, `KNN`, `XGBoost` meta-classified by `LogisticRegression`)
-- **Optimal threshold**: `0.73` (tuned on the validation set with recall constraint >= 0.60)
+- **Optimal threshold**: `0.72` (tuned on the validation set with recall constraint >= 0.60)
 - **Data balancing**: RandomOverSampler (0.2) + BorderlineSMOTE (0.3)
 - **Scaling**: StandardScaler fitted on training features (`scaler.pkl`)
-- **Features (Top 7)**: `glucose`, `hypertensive`, `systolic_bp`, `diastolic_bp`, `bmi`, `weight`, `pulse_rate` (selected via weighted voting: Correlation, RF, L1, RFE)
+- **Features (all 14 inputs, no feature selection)**: `age`, `gender`, `pulse_rate`, `systolic_bp`, `diastolic_bp`, `glucose`, `height`, `weight`, `bmi`, `family_diabetes`, `hypertensive`, `family_hypertension`, `cardiovascular_disease`, `stroke`. This corresponds to the notebook's "Full Feature" Ensemble Stacking experiment.
 - **Retraining**: Run `python train_model.py` to retrain and update `model.pkl`, `scaler.pkl`, and `model_metadata.json`.
 
 ## 📄 License

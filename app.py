@@ -269,12 +269,24 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Model and Feature Configuration
-FEATURE_NAMES = ['glucose', 'hypertensive', 'systolic_bp', 'diastolic_bp', 'bmi', 'weight', 'pulse_rate']
-OPTIMAL_THRESHOLD = 0.73  # Validation-derived optimal threshold for Ensemble Stacking
+# All 14 input features, in the same order used to train the model.
+# Encodings: gender (Male=0, Female=1), height in meters, yes/no fields as 0/1.
+FEATURE_NAMES = [
+    'age', 'gender', 'pulse_rate', 'systolic_bp', 'diastolic_bp', 'glucose', 'height',
+    'weight', 'bmi', 'family_diabetes', 'hypertensive', 'family_hypertension',
+    'cardiovascular_disease', 'stroke'
+]
+OPTIMAL_THRESHOLD = 0.72  # Validation-derived optimal threshold for Ensemble Stacking (14 features)
 
-# Fallback scaler parameters (derived from training data)
-FALLBACK_MEAN = np.array([7.2629, 0.1105, 134.1616, 82.2852, 22.2454, 53.5635, 76.6386])
-FALLBACK_SCALE = np.array([1.8129, 0.3135, 21.5387, 12.2587, 3.7197, 9.7586, 11.8925])
+# Fallback scaler parameters (derived from training data, same order as FEATURE_NAMES)
+FALLBACK_MEAN = np.array([
+    45.8563, 0.7098, 76.6386, 134.1616, 82.2852, 7.2629, 1.5502,
+    53.5635, 22.2454, 0.0327, 0.1105, 0.0351, 0.0105, 0.0041
+])
+FALLBACK_SCALE = np.array([
+    13.3576, 0.4539, 11.8925, 21.5387, 12.2587, 1.8129, 0.0698,
+    9.7586, 3.7197, 0.1778, 0.3135, 0.1841, 0.1021, 0.0635
+])
 
 # Load model, scaler, and threshold
 @st.cache_resource
@@ -446,28 +458,30 @@ def input_page():
     # Create form
     with st.form("prediction_form", border=False):
         col1, col2 = st.columns([1, 1])
+        yes_no = lambda x: t('opt_no', lang) if x == 0 else t('opt_yes', lang)
         
         with col1:
-            glucose = st.number_input(
-                t('label_glucose', lang),
-                min_value=0.0,
-                value=5.0,
-                step=0.1,
-                help=t('help_glucose', lang)
+            age = st.number_input(
+                t('label_age', lang),
+                min_value=0,
+                max_value=120,
+                value=35,
+                step=1,
+                help=t('help_age', lang)
             )
             
-            hypertensive = st.selectbox(
-                t('label_hypertensive', lang),
+            gender = st.selectbox(
+                t('label_gender', lang),
                 options=[0, 1],
-                format_func=lambda x: t('opt_no', lang) if x == 0 else t('opt_yes', lang)
+                format_func=lambda x: t('opt_male', lang) if x == 0 else t('opt_female', lang)
             )
             
-            systolic_bp = st.number_input(
-                t('label_systolic', lang),
+            height_cm = st.number_input(
+                t('label_height', lang),
                 min_value=0.0,
-                value=120.0,
+                value=160.0,
                 step=1.0,
-                help=t('help_systolic', lang)
+                help=t('help_height', lang)
             )
             
             weight = st.number_input(
@@ -477,13 +491,37 @@ def input_page():
                 step=0.1
             )
             
-        with col2:
             bmi = st.number_input(
                 t('label_bmi', lang),
                 min_value=0.0,
                 value=22.0,
                 step=0.1,
                 help=t('help_bmi', lang)
+            )
+            
+            glucose = st.number_input(
+                t('label_glucose', lang),
+                min_value=0.0,
+                value=5.0,
+                step=0.1,
+                help=t('help_glucose', lang)
+            )
+            
+            pulse_rate = st.number_input(
+                t('label_pulse', lang),
+                min_value=0.0,
+                value=70.0,
+                step=1.0,
+                help=t('help_pulse', lang)
+            )
+            
+        with col2:
+            systolic_bp = st.number_input(
+                t('label_systolic', lang),
+                min_value=0.0,
+                value=120.0,
+                step=1.0,
+                help=t('help_systolic', lang)
             )
             
             diastolic_bp = st.number_input(
@@ -494,12 +532,38 @@ def input_page():
                 help=t('help_diastolic', lang)
             )
             
-            pulse_rate = st.number_input(
-                t('label_pulse', lang),
-                min_value=0.0,
-                value=70.0,
-                step=1.0,
-                help=t('help_pulse', lang)
+            hypertensive = st.selectbox(
+                t('label_hypertensive', lang),
+                options=[0, 1],
+                format_func=yes_no
+            )
+            
+            family_hypertension = st.selectbox(
+                t('label_family_hypertension', lang),
+                options=[0, 1],
+                format_func=yes_no,
+                help=t('help_family_hypertension', lang)
+            )
+            
+            family_diabetes = st.selectbox(
+                t('label_family_diabetes', lang),
+                options=[0, 1],
+                format_func=yes_no,
+                help=t('help_family_diabetes', lang)
+            )
+            
+            cardiovascular_disease = st.selectbox(
+                t('label_cardiovascular', lang),
+                options=[0, 1],
+                format_func=yes_no,
+                help=t('help_cardiovascular', lang)
+            )
+            
+            stroke = st.selectbox(
+                t('label_stroke', lang),
+                options=[0, 1],
+                format_func=yes_no,
+                help=t('help_stroke', lang)
             )
             
         st.markdown("<br>", unsafe_allow_html=True)
@@ -511,32 +575,34 @@ def input_page():
 
     if submit:
         # Validate inputs
-        if glucose == 0 or pulse_rate == 0 or weight == 0 or systolic_bp == 0 or bmi == 0 or diastolic_bp == 0:
+        if (age == 0 or height_cm == 0 or glucose == 0 or pulse_rate == 0 or weight == 0
+                or systolic_bp == 0 or bmi == 0 or diastolic_bp == 0):
             st.error(t('err_zero', lang))
         elif model is None:
             st.error(t('err_model', lang))
         else:
-            # Store input data in session state
-            st.session_state.input_data = {
-                'glucose': glucose,
-                'hypertensive': hypertensive,
+            # Store all 14 inputs in session state (height is converted from cm to meters,
+            # which is the unit used by the training data)
+            input_data = {
+                'age': age,
+                'gender': gender,
                 'pulse_rate': pulse_rate,
-                'weight': weight,
-                'systolic_bp': systolic_bp,
-                'bmi': bmi,
-                'diastolic_bp': diastolic_bp
-            }
-            
-            # Prepare input for prediction with correct feature ordering and scaling
-            scaled_df = scale_input_features({
-                'glucose': glucose,
-                'hypertensive': hypertensive,
                 'systolic_bp': systolic_bp,
                 'diastolic_bp': diastolic_bp,
-                'bmi': bmi,
+                'glucose': glucose,
+                'height': height_cm / 100.0,
                 'weight': weight,
-                'pulse_rate': pulse_rate
-            })
+                'bmi': bmi,
+                'family_diabetes': family_diabetes,
+                'hypertensive': hypertensive,
+                'family_hypertension': family_hypertension,
+                'cardiovascular_disease': cardiovascular_disease,
+                'stroke': stroke
+            }
+            st.session_state.input_data = input_data
+            
+            # Prepare input for prediction with correct feature ordering and scaling
+            scaled_df = scale_input_features(input_data)
             
             # Predict
             try:
@@ -757,18 +823,18 @@ def render_interactive_insights(input_data):
             sim_dia_bp = st.slider(t('label_diastolic', lang), 50.0, 120.0, float(input_data.get('diastolic_bp', 80.0)), 1.0)
             sim_pulse = st.slider(t('label_pulse', lang), 40.0, 150.0, float(input_data.get('pulse_rate', 70.0)), 1.0)
             
-        hypertensive = input_data.get('hypertensive', 0)
-        
         if model is not None:
-            sim_scaled_df = scale_input_features({
+            # Start from all 14 submitted inputs and override the values adjusted by the sliders
+            sim_input = dict(input_data)
+            sim_input.update({
                 'glucose': sim_glucose,
-                'hypertensive': hypertensive,
                 'systolic_bp': sim_sys_bp,
                 'diastolic_bp': sim_dia_bp,
                 'bmi': sim_bmi,
                 'weight': sim_weight,
                 'pulse_rate': sim_pulse
             })
+            sim_scaled_df = scale_input_features(sim_input)
             
             sim_prob = float(model.predict_proba(sim_scaled_df)[0][1]) * 100
             threshold_pct = optimal_threshold * 100
