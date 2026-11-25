@@ -24,7 +24,9 @@
     "test_precision": 0.291,
     "test_recall": 0.5652,
     "test_f1": 0.3842,
-    "test_roc_auc": 0.8537
+    "test_roc_auc": 0.8537,
+    "test_samples": 1058,
+    "diabetes_share": 0.0647
   },
   "scaler_mean": [
     45.85625506619832,

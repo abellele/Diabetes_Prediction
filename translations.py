@@ -1,6 +1,10 @@
 """
 Translations module for SugarSense Diabetes Risk Prediction Web App.
 Supports English ('en') and Bahasa Indonesia ('id').
+
+The Indonesian text is written to sound natural to Indonesian readers
+(everyday health vocabulary such as "gula darah" and "darah tinggi"),
+not as a word-for-word translation of the English text.
 """
 
 TRANSLATIONS = {
@@ -10,6 +14,69 @@ TRANSLATIONS = {
         'lang_label': '🌐 Language / Bahasa',
         'nav_dashboard': 'Dashboard',
         'nav_prediction': 'Prediction',
+        'nav_report': 'Report',
+        'greet_morning': 'Good Morning',
+        'greet_afternoon': 'Good Afternoon',
+        'greet_evening': 'Good Evening',
+        'greet_name': 'there!',
+        'btn_check_new': '+  Check new',
+        'chip_features': 'Model features',
+        'chip_threshold': 'Decision threshold',
+        'chip_accuracy': 'Model accuracy',
+        'chip_dataset': 'Dataset',
+        'chip_records': 'records',
+        'card_glucose_trend': 'Glucose Trend by Age',
+        'card_prevalence': 'Diabetes Prevalence',
+        'card_recent': 'Recent Checks',
+        'card_health_info': 'Health Information',
+        'card_bmi_rate': 'Diabetes Rate by BMI Category',
+        'card_ranges': 'Healthy Ranges',
+        'pill_dataset': 'Dataset',
+        'pill_today': "Today's info",
+        'pill_last_input': 'Last input',
+        'pill_model': 'Model',
+        'pill_guide': 'Guide',
+        'pill_tips': 'Tips',
+        'pill_fields': '14 fields',
+        'pill_model_output': 'Model output',
+        'pill_personalized': 'Personalized',
+        'pill_how_to_read': 'How to read',
+        'pill_result': 'Result',
+        'of_people': 'of {n:,} people',
+        'no_checks_title': 'No checks yet',
+        'no_checks_sub': 'Run your first prediction to see it here.',
+        'latest_check': 'Your latest check',
+        'below_avg': 'Below average',
+        'above_avg': 'Above average',
+        'avg_label': 'avg',
+        'step_1': '① Fill data',
+        'step_2': '② Generate prediction',
+        'step_3': '③ Read your report',
+        'tips_title': 'Before you start',
+        'tips_desc': 'Use your most recent measurements. Fasting glucose and resting blood pressure give the most reliable prediction.',
+        'card_your_metrics': 'Your Health Metrics',
+        'card_pred_prob': 'Prediction Probability',
+        'report_subtitle': 'Here is the summary of your diabetes risk prediction.',
+        'chip_risk': 'Diabetes risk',
+        'neg_tip1_title': 'Stay active',
+        'neg_tip1_sub': 'Aim for 150 minutes of exercise weekly.',
+        'neg_tip2_title': 'Regular check-ups',
+        'neg_tip2_sub': 'Keep monitoring your health yearly.',
+        'pos_tip1_title': 'Consult a doctor',
+        'pos_tip1_sub': 'We highly recommend a medical check-up.',
+        'pos_tip2_title': 'Review your lifestyle',
+        'pos_tip2_sub': 'Healthy diet, exercise, and regular monitoring.',
+        'kv_algorithm': 'Algorithm',
+        'kv_features': 'Input features',
+        'kv_features_val': '14 indicators',
+        'kv_threshold': 'Threshold',
+        'kv_accuracy': 'Test accuracy',
+        'kv_training': 'Training data',
+        'kv_output': 'Output',
+        'range_glucose': 'Glucose',
+        'range_bmi': 'Body Mass Index',
+        'range_bp': 'Blood Pressure',
+        'range_pulse': 'Pulse Rate',
         
         # Dashboard / Home
         'hero_title': 'Good Day!',
@@ -99,6 +166,23 @@ TRANSLATIONS = {
         'pos_highlight': '💡 We highly recommend consulting a healthcare professional.',
         'btn_new_pred': 'New Prediction',
 
+        # Result explanation (what the numbers mean - short & plain)
+        'explain_title': '📖 How to Read Your Result',
+        'explain_intro': 'A quick guide to what each number means.',
+        'explain_score_title': 'Your Risk Score',
+        'explain_score_desc': 'Your estimated chance of diabetes from the AI model. Higher means higher risk (not a medical diagnosis).',
+        'explain_safe_note': '"Safe" on the chart is simply 100% minus this score.',
+        'explain_threshold_title': 'Decision Threshold',
+        'explain_threshold_desc': 'The cut-off line. A score at or above this line is flagged as Diabetes.',
+        'explain_threshold_above': 'Your score ({score:.0f}%) is above the line → {label}.',
+        'explain_threshold_below': 'Your score ({score:.0f}%) is below the line → {label}.',
+        'explain_accuracy_title': 'Model Accuracy',
+        'explain_accuracy_desc': 'In tests on {n:,} people, the model got about {correct:.0f} out of 100 right.',
+        'explain_note_title': 'Quick note on accuracy',
+        'explain_note_desc': 'Only about {share:.0f} in 100 people in the dataset had diabetes, so two extra numbers also matter:',
+        'explain_recall': '<b>Recall {recall:.0f}%</b>: catches about {recall:.0f} out of 100 real diabetes cases.',
+        'explain_precision': '<b>Precision {precision:.0f}%</b>: about {precision:.0f} in 100 positive alerts truly had diabetes — treat a positive result as a reminder to see a doctor.',
+
         # Interactive Insights
         'insights_title': '📌 Interactive Health Insights',
         'tab_deep_dive': '🔍 Deep Dive Insights',
@@ -157,146 +241,226 @@ TRANSLATIONS = {
         'lang_label': '🌐 Bahasa / Language',
         'nav_dashboard': 'Beranda',
         'nav_prediction': 'Prediksi',
+        'nav_report': 'Laporan',
+        'greet_morning': 'Selamat Pagi',
+        'greet_afternoon': 'Selamat Siang',
+        'greet_evening': 'Selamat Malam',
+        'greet_name': 'Sahabat!',
+        'btn_check_new': '+  Cek baru',
+        'chip_features': 'Fitur model',
+        'chip_threshold': 'Batas keputusan',
+        'chip_accuracy': 'Akurasi model',
+        'chip_dataset': 'Dataset',
+        'chip_records': 'data',
+        'card_glucose_trend': 'Tren Gula Darah per Usia',
+        'card_prevalence': 'Prevalensi Diabetes',
+        'card_recent': 'Riwayat Cek',
+        'card_health_info': 'Informasi Kesehatan',
+        'card_bmi_rate': 'Persentase Diabetes per Kategori BMI',
+        'card_ranges': 'Rentang Sehat',
+        'pill_dataset': 'Dataset',
+        'pill_today': 'Info hari ini',
+        'pill_last_input': 'Input terakhir',
+        'pill_model': 'Model',
+        'pill_guide': 'Panduan',
+        'pill_tips': 'Tips',
+        'pill_fields': '14 kolom',
+        'pill_model_output': 'Output model',
+        'pill_personalized': 'Personal',
+        'pill_how_to_read': 'Cara baca',
+        'pill_result': 'Hasil',
+        'of_people': 'dari {n:,} orang',
+        'no_checks_title': 'Belum ada pengecekan',
+        'no_checks_sub': 'Lakukan prediksi pertama agar muncul di sini.',
+        'latest_check': 'Pengecekan terakhir',
+        'below_avg': 'Di bawah rata-rata',
+        'above_avg': 'Di atas rata-rata',
+        'avg_label': 'rata-rata',
+        'step_1': '① Isi data',
+        'step_2': '② Lihat prediksi',
+        'step_3': '③ Baca laporan',
+        'tips_title': 'Sebelum mulai',
+        'tips_desc': 'Gunakan hasil ukur terbaru. Gula darah puasa serta tekanan darah dan nadi saat istirahat memberi hasil paling akurat.',
+        'card_your_metrics': 'Data Kesehatan Anda',
+        'card_pred_prob': 'Probabilitas Prediksi',
+        'report_subtitle': 'Berikut ringkasan hasil prediksi risiko diabetes Anda.',
+        'chip_risk': 'Risiko diabetes',
+        'neg_tip1_title': 'Tetap aktif',
+        'neg_tip1_sub': 'Usahakan olahraga sekitar 150 menit per minggu.',
+        'neg_tip2_title': 'Cek rutin',
+        'neg_tip2_sub': 'Pantau kesehatan secara berkala tiap tahun.',
+        'pos_tip1_title': 'Konsultasi dokter',
+        'pos_tip1_sub': 'Sebaiknya segera periksakan diri ke tenaga medis.',
+        'pos_tip2_title': 'Evaluasi pola hidup',
+        'pos_tip2_sub': 'Jaga pola makan, olahraga, dan pantau gula darah.',
+        'kv_algorithm': 'Algoritma',
+        'kv_features': 'Fitur input',
+        'kv_features_val': '14 indikator',
+        'kv_threshold': 'Batas risiko',
+        'kv_accuracy': 'Akurasi uji',
+        'kv_training': 'Data latih',
+        'kv_output': 'Output',
+        'range_glucose': 'Gula Darah',
+        'range_bmi': 'Indeks Massa Tubuh',
+        'range_bp': 'Tekanan Darah',
+        'range_pulse': 'Denyut Nadi',
         
         # Dashboard / Home
         'hero_title': 'Selamat Datang!',
-        'hero_subtitle': 'Selamat datang di dasbor deteksi dini risiko diabetes Anda.',
-        'what_is_title': 'Apa itu SugarSense?',
+        'hero_subtitle': 'Cek risiko diabetes Anda sejak dini, dengan cara yang mudah dan cepat.',
+        'what_is_title': 'Apa Itu SugarSense?',
         'what_is_desc': (
-            'SugarSense adalah aplikasi web berbasis kecerdasan buatan (AI) yang dirancang untuk '
-            'membantu memperkirakan risiko diabetes berdasarkan indikator kesehatan dasar. '
-            'Dengan menganalisis glukosa, indeks massa tubuh (BMI), dan tekanan darah, sistem '
-            'memberikan deteksi dini guna mendorong kesadaran dan pola hidup sehat.'
+            'SugarSense adalah aplikasi web berbasis AI yang membantu memperkirakan risiko diabetes '
+            'dari data kesehatan dasar, seperti kadar gula darah, BMI, dan tekanan darah. '
+            'Hasilnya bisa jadi pengingat awal agar Anda lebih peduli pada kesehatan dan pola hidup.'
         ),
-        'what_do_title': 'Apa yang Dilakukan SugarSense?',
+        'what_do_title': 'Apa yang Bisa Dilakukan SugarSense?',
         'what_do_desc': (
-            'Kami menggunakan teknologi machine learning untuk menganalisis data kesehatan Anda '
-            'dan memberikan estimasi risiko diabetes dalam hitungan detik.'
+            'SugarSense memakai machine learning untuk membaca data kesehatan Anda '
+            'dan memperkirakan risiko diabetes hanya dalam hitungan detik.'
         ),
-        'why_title': 'Mengapa SugarSense?',
+        'why_title': 'Kenapa SugarSense?',
         'why_desc': (
-            'Deteksi dini membawa perubahan besar. SugarSense hadir untuk membuat skrining kesehatan '
-            'menjadi lebih mudah diakses, praktis, dan dipahami oleh siapa saja.'
+            'Mengetahui risiko sejak dini sangat berarti. SugarSense dibuat supaya skrining kesehatan '
+            'terasa lebih mudah, sederhana, dan bisa dipahami siapa saja.'
         ),
-        'disclaimer_title': '⚠️ Hanya untuk Tujuan Edukasi',
+        'disclaimer_title': '⚠️ Hanya untuk Edukasi',
         'disclaimer_desc': (
-            'SugarSense ditujukan hanya untuk keperluan edukasi dan tidak menggantikan saran medis, '
-            'diagnosis, atau penanganan dokter. Selalu konsultasikan kesehatan Anda dengan dokter profesional.'
+            'SugarSense hanya untuk keperluan edukasi dan tidak menggantikan diagnosis atau saran dokter. '
+            'Selalu konsultasikan kondisi kesehatan Anda ke tenaga medis.'
         ),
         'btn_start': '+ Mulai Prediksi Baru',
 
         # Input Page
-        'form_title': 'Informasi Kesehatan',
-        'form_subtitle': 'Silakan masukkan metrik kesehatan Anda untuk mendapatkan hasil prediksi yang akurat.',
+        'form_title': 'Data Kesehatan',
+        'form_subtitle': 'Isi data kesehatan Anda di bawah ini untuk mendapatkan hasil prediksi.',
         'label_age': 'Usia (tahun)',
-        'help_age': 'Usia Anda saat ini dalam tahun',
+        'help_age': 'Usia Anda saat ini',
         'label_gender': 'Jenis Kelamin',
         'opt_male': 'Laki-laki',
         'opt_female': 'Perempuan',
         'label_height': 'Tinggi Badan (cm)',
-        'help_height': 'Masukkan tinggi badan dalam sentimeter, contoh: 160',
-        'label_glucose': 'Kadar Glukosa (mmol/L)',
-        'help_glucose': 'Rentang normal: 4.0-7.0 mmol/L',
-        'label_hypertensive': 'Riwayat Hipertensi',
-        'label_family_diabetes': 'Riwayat Diabetes Keluarga',
+        'help_height': 'Isi dalam sentimeter, contoh: 160',
+        'label_glucose': 'Kadar Gula Darah (mmol/L)',
+        'help_glucose': 'Normalnya 4.0-7.0 mmol/L',
+        'label_hypertensive': 'Hipertensi (Darah Tinggi)',
+        'label_family_diabetes': 'Riwayat Diabetes di Keluarga',
         'help_family_diabetes': 'Apakah ada anggota keluarga dekat yang menderita diabetes?',
-        'label_family_hypertension': 'Riwayat Hipertensi Keluarga',
-        'help_family_hypertension': 'Apakah ada anggota keluarga dekat yang menderita hipertensi?',
-        'label_cardiovascular': 'Penyakit Kardiovaskular',
-        'help_cardiovascular': 'Apakah Anda pernah didiagnosis penyakit jantung atau kardiovaskular?',
-        'label_stroke': 'Riwayat Stroke',
-        'help_stroke': 'Apakah Anda pernah mengalami stroke?',
+        'label_family_hypertension': 'Riwayat Hipertensi di Keluarga',
+        'help_family_hypertension': 'Apakah ada anggota keluarga dekat yang menderita darah tinggi?',
+        'label_cardiovascular': 'Penyakit Jantung & Pembuluh Darah',
+        'help_cardiovascular': 'Pernah didiagnosis dokter menderita penyakit jantung atau pembuluh darah?',
+        'label_stroke': 'Pernah Stroke',
+        'help_stroke': 'Apakah Anda pernah terkena stroke?',
         'opt_no': 'Tidak',
         'opt_yes': 'Ya',
-        'label_systolic': 'Tekanan Darah Sistolik (mmHg)',
-        'help_systolic': 'Normal: <120 mmHg',
-        'label_diastolic': 'Tekanan Darah Diastolik (mmHg)',
-        'help_diastolic': 'Normal: <80 mmHg',
+        'label_systolic': 'Tekanan Darah Atas / Sistolik (mmHg)',
+        'help_systolic': 'Normalnya di bawah 120 mmHg',
+        'label_diastolic': 'Tekanan Darah Bawah / Diastolik (mmHg)',
+        'help_diastolic': 'Normalnya di bawah 80 mmHg',
         'label_bmi': 'Indeks Massa Tubuh (BMI)',
-        'help_bmi': 'Rentang normal: 18.5-24.9',
+        'help_bmi': 'Normalnya 18.5-24.9',
         'label_weight': 'Berat Badan (kg)',
         'label_pulse': 'Denyut Nadi (bpm)',
-        'help_pulse': 'Rentang normal: 60-100 bpm',
+        'help_pulse': 'Normalnya 60-100 bpm',
         'btn_predict': 'Lihat Hasil Prediksi',
-        'err_zero': '⚠️ Harap masukkan nilai yang valid untuk semua kolom. Nilai tidak boleh 0.',
-        'err_model': '❌ Model tidak ditemukan. Pastikan file model.pkl tersedia di direktori.',
+        'err_zero': '⚠️ Mohon isi semua kolom dengan benar. Nilainya tidak boleh 0.',
+        'err_model': '❌ File model tidak ditemukan. Pastikan model.pkl ada di folder aplikasi.',
 
         # Result Pages
-        'report_heading': 'Laporan Hasil Prediksi',
+        'report_heading': 'Hasil Prediksi',
         'neg_title': 'Tidak Terdeteksi Diabetes',
-        'neg_subtitle': 'Indikator kesehatan Anda saat ini menunjukkan kemungkinan rendah terhadap risiko diabetes.',
-        'pos_title': 'Terdeteksi Risiko Diabetes',
-        'pos_subtitle': 'Model menemukan indikator yang berkaitan dengan kemungkinan diabetes.',
+        'neg_subtitle': 'Dari data yang Anda isi, risiko diabetes Anda tergolong rendah.',
+        'pos_title': 'Terdeteksi Berisiko Diabetes',
+        'pos_subtitle': 'Model menemukan tanda-tanda yang sering dikaitkan dengan diabetes.',
         'chart_safe': 'Aman',
         'chart_risk': 'Risiko',
         'chart_non_diab': 'Bukan Diabetes',
         'chart_diab': 'Diabetes',
-        'analysis_title': 'Analisis Status Kesehatan',
+        'analysis_title': 'Ringkasan Kondisi Anda',
         'neg_analysis_desc': (
-            'Berdasarkan data kesehatan Anda, sistem mendeteksi kemungkinan rendah terhadap diabetes. '
-            'Grafik di sebelah kiri mengilustrasikan tingkat keyakinan prediksi yang dihasilkan model AI kami. '
-            'Pertahankan kebiasaan hidup sehat dan terus rawat kebugaran tubuh Anda.'
+            'Berdasarkan data yang Anda isi, kemungkinan Anda menderita diabetes tergolong kecil. '
+            'Grafik di samping menunjukkan seberapa yakin model terhadap hasil ini. '
+            'Tetap jaga pola hidup sehat dan rawat tubuh Anda.'
         ),
-        'neg_highlight': '💡 Pertahankan pola hidup sehat dan lakukan pemeriksaan kesehatan berkala.',
+        'neg_highlight': '💡 Tetap jaga pola hidup sehat dan rutin cek kesehatan.',
         'pos_analysis_desc': (
-            'Berdasarkan data kesehatan Anda, Anda memiliki <b>kemungkinan {prob:.0f}%</b> terhadap diabetes. '
-            'Grafik di sebelah kiri mengilustrasikan tingkat keyakinan prediksi dari model AI kami.<br><br>'
-            'Jangan panik — ini adalah deteksi dini algoritma untuk membantu Anda lebih waspada terhadap kesehatan.'
+            'Berdasarkan data yang Anda isi, kemungkinan Anda menderita diabetes sekitar <b>{prob:.0f}%</b>. '
+            'Grafik di samping menunjukkan seberapa yakin model terhadap hasil ini.<br><br>'
+            'Tenang, ini baru perkiraan awal dari model dan bukan diagnosis. '
+            'Anggap saja sebagai pengingat untuk lebih memperhatikan kesehatan.'
         ),
-        'pos_highlight': '💡 Kami sangat menyarankan Anda untuk berkonsultasi dengan dokter profesional.',
-        'btn_new_pred': 'Prediksi Baru',
+        'pos_highlight': '💡 Sebaiknya segera periksakan diri ke dokter.',
+        'btn_new_pred': 'Prediksi Lagi',
+
+        # Result explanation (what the numbers mean - short & plain)
+        'explain_title': '📖 Cara Membaca Hasil Ini',
+        'explain_intro': 'Penjelasan singkat arti setiap angka di atas.',
+        'explain_score_title': 'Skor Risiko Anda',
+        'explain_score_desc': 'Perkiraan risiko diabetes dari model AI. Makin tinggi berarti risikonya makin besar (bukan diagnosis dokter).',
+        'explain_safe_note': 'Angka "Aman" di grafik adalah 100% dikurangi skor ini.',
+        'explain_threshold_title': 'Batas Keputusan',
+        'explain_threshold_desc': 'Garis batas penentu. Skor di atas garis ini ditandai berisiko diabetes.',
+        'explain_threshold_above': 'Skor Anda ({score:.0f}%) di atas batas → {label}.',
+        'explain_threshold_below': 'Skor Anda ({score:.0f}%) di bawah batas → {label}.',
+        'explain_accuracy_title': 'Akurasi Model',
+        'explain_accuracy_desc': 'Dari uji coba pada {n:,} orang, model menebak benar sekitar {correct:.0f} dari 100 orang.',
+        'explain_note_title': 'Catatan singkat soal akurasi',
+        'explain_note_desc': 'Di data latih hanya sekitar {share:.0f} dari 100 orang yang diabetes, jadi 2 angka ini juga penting:',
+        'explain_recall': '<b>Recall {recall:.0f}%</b>: berhasil mendeteksi sekitar {recall:.0f} dari 100 kasus diabetes asli.',
+        'explain_precision': '<b>Presisi {precision:.0f}%</b>: sekitar {precision:.0f} dari 100 hasil positif memang diabetes — anggap hasil positif sebagai pengingat untuk cek ke dokter.',
 
         # Interactive Insights
-        'insights_title': '📌 Wawasan Kesehatan Interaktif',
-        'tab_deep_dive': '🔍 Analisis Mendalam',
+        'insights_title': '📌 Wawasan Kesehatan Anda',
+        'tab_deep_dive': '🔍 Penjelasan Detail',
         'tab_gauges': '📊 Indikator Visual',
-        'tab_simulator': '🎛️ Simulator Skenario',
+        'tab_simulator': '🎛️ Simulasi "Bagaimana Jika"',
 
         # Deep Dive Cards
-        'card_bmi_title': '⚖️ Manajemen Berat Badan (BMI)',
-        'card_glucose_title': '🩸 Gula Darah (Glukosa)',
+        'card_bmi_title': '⚖️ Berat Badan (BMI)',
+        'card_glucose_title': '🩸 Gula Darah',
         'card_bp_title': '🫀 Tekanan Darah',
-        'card_hr_title': '❤️ Denyut Jantung (Nadi)',
-        'action_plan': 'Rencana Aksi:',
+        'card_hr_title': '❤️ Denyut Nadi',
+        'action_plan': 'Saran:',
 
         # BMI statuses & advice
-        'stat_underweight': 'Berat Rendah',
-        'plan_underweight': 'Pertimbangkan pola makan bergizi seimbang untuk mencapai berat ideal. Konsultasikan dengan ahli gizi.',
-        'stat_overweight': 'Kelebihan Berat',
-        'plan_overweight': 'Pola makan seimbang dan aktivitas fisik teratur dapat membantu. Usahakan olahraga 150 menit per minggu.',
+        'stat_underweight': 'Berat Kurang',
+        'plan_underweight': 'Atur pola makan bergizi seimbang agar berat badan naik ke batas sehat. Sebaiknya konsultasi dengan ahli gizi.',
+        'stat_overweight': 'Berat Berlebih',
+        'plan_overweight': 'Pola makan seimbang dan rutin bergerak bisa membantu. Usahakan olahraga sekitar 150 menit per minggu.',
         'stat_obese': 'Obesitas',
-        'plan_obese': 'Sangat disarankan berkonsultasi dengan dokter untuk program pengelolaan berat badan.',
-        'stat_healthy_weight': 'Rentang Normal',
-        'plan_healthy_weight': 'Kerja bagus! Pertahankan pola makan seimbang dan olahraga teratur.',
+        'plan_obese': 'Sebaiknya konsultasi dengan dokter untuk menyusun program penurunan berat badan.',
+        'stat_healthy_weight': 'Normal',
+        'plan_healthy_weight': 'Bagus! Pertahankan pola makan seimbang dan rajin berolahraga.',
 
         # Glucose statuses & advice
         'stat_above_normal': 'Di Atas Normal',
-        'plan_above_normal': 'Kurangi konsumsi gula pasir dan karbohidrat sederhana. Lakukan pemantauan gula darah berkala.',
+        'plan_above_normal': 'Coba kurangi makanan dan minuman manis serta karbohidrat olahan, dan cek gula darah secara rutin.',
         'stat_below_normal': 'Di Bawah Normal',
-        'plan_below_normal': 'Pastikan makan teratur dengan gizi seimbang. Jangan melewatkan waktu makan.',
+        'plan_below_normal': 'Makan teratur dengan menu seimbang dan jangan sampai melewatkan jam makan.',
         'stat_normal_glucose': 'Normal',
-        'plan_normal_glucose': 'Sangat baik! Pertahankan pola makan sehat dan kebiasaan baik saat ini.',
+        'plan_normal_glucose': 'Bagus! Pertahankan pola makan dan kebiasaan sehat Anda.',
 
         # BP statuses & advice
-        'stat_elevated_bp': 'Meningkat',
-        'plan_elevated_bp': 'Kurangi konsumsi garam, olahraga teratur, dan kelola stres untuk menjaga tekanan darah.',
+        'stat_elevated_bp': 'Tinggi',
+        'plan_elevated_bp': 'Kurangi garam, rutin berolahraga, dan kelola stres untuk membantu menurunkan tekanan darah.',
         'stat_normal_bp': 'Normal',
-        'plan_normal_bp': 'Hebat! Lanjutkan pemantauan dan pertahankan pola hidup sehat.',
+        'plan_normal_bp': 'Bagus! Terus pantau tekanan darah dan jaga pola hidup sehat.',
 
         # Heart rate statuses & advice
         'stat_high_hr': 'Tinggi',
-        'plan_high_hr': 'Latihan kardiovaskular dan manajemen stres dapat membantu menurunkan denyut nadi.',
+        'plan_high_hr': 'Olahraga kardio dan mengelola stres bisa membantu menurunkan denyut nadi.',
         'stat_low_hr': 'Rendah',
-        'plan_low_hr': 'Ini bisa normal bagi atlet, namun perhatikan jika timbul pusing atau lemas.',
+        'plan_low_hr': 'Ini bisa normal pada orang yang rutin berolahraga, tetapi waspada jika Anda sering pusing atau mudah lemas.',
         'stat_normal_hr': 'Normal',
-        'plan_normal_hr': 'Denyut nadi istirahat Anda berada dalam rentang yang sehat.',
+        'plan_normal_hr': 'Denyut nadi istirahat Anda masih dalam rentang sehat.',
 
         # What-If Simulator
-        'sim_desc': 'Geser pengatur di bawah untuk melihat bagaimana perubahan metrik kesehatan memengaruhi risiko diabetes Anda secara langsung.',
-        'sim_title': 'Probabilitas Risiko Simulasi',
-        'sim_above': 'Risiko simulasi berada di atas ambang batas ({thresh:.0f}%). Coba turunkan BMI, Glukosa, atau Tekanan Darah.',
-        'sim_below': 'Risiko simulasi berada dalam zona aman (di bawah {thresh:.0f}%)!',
-        'sim_error': 'Model tidak dapat dimuat untuk simulasi.'
+        'sim_desc': 'Geser slider di bawah untuk melihat bagaimana perubahan data kesehatan memengaruhi perkiraan risiko diabetes Anda.',
+        'sim_title': 'Perkiraan Risiko Hasil Simulasi',
+        'sim_above': 'Risiko hasil simulasi masih di atas batas ({thresh:.0f}%). Coba turunkan BMI, gula darah, atau tekanan darah.',
+        'sim_below': 'Risiko hasil simulasi sudah di bawah batas ({thresh:.0f}%). Aman!',
+        'sim_error': 'Model tidak bisa dimuat untuk simulasi.'
     }
 }
 

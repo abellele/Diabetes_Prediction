@@ -226,7 +226,10 @@ def train_and_save():
             'test_precision': round(test_prec, 4),
             'test_recall': round(test_rec, 4),
             'test_f1': round(test_f1, 4),
-            'test_roc_auc': round(test_auc, 4)
+            'test_roc_auc': round(test_auc, 4),
+            # Context used by the app to explain the numbers to users
+            'test_samples': int(len(y_test)),
+            'diabetes_share': round(float(y_full.mean()), 4)
         },
         'scaler_mean': selected_mean,
         'scaler_scale': selected_scale
